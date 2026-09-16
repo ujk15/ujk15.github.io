@@ -15,7 +15,7 @@ h1 {
 }
 #body-container{
   background-color:#f7f7f7;
-  max-width: 1000px
+  max-width: 1000px;
   margin: auto;
   min-height: 100vh;
   border: 2px solid #f7f7f7;
@@ -25,7 +25,7 @@ h1 {
 #header{
   background-color: #0571b0;
 }
-#profile-picture {
+#Profile-Picture {
   float: left;
 }
 #welcome-text {
