@@ -12,16 +12,25 @@ return message
 }
 function webmap_table()
 {
-  document.write("<table width=100%>");
-  for (var row=0; row < 2; row++)
-  {
-    document.write("<tr>");
-    for (var column=0; column < 3; column++)
-    {
-      document.write("<td>" + row + "," + column + "</td>");
-    }
-    document.write("</tr>");
-  }
-  document.write("</table>");
-  return "";
+document.write("<table width=100%>");
+for (var row=0; row < webmaps.length; row++)
+{
+document.write("<tr>");
+for (var column=0; column < webmaps[0].length; column++)
+{
+document.write("<td>" + webmaps[row][column] + "</td>");
+}
+document.write("</tr>");
+}
+document.write("</table>");
+return "";
+}
+var webmaps =
+[
+["City of Rockwall GIS,", "https://data2018-01-24t211534446z-rockwall.opendata.arcgis.com/", "I would I would say one example of web mapping is a city website that contains interactive maps of their town. It also covers multiple types of data using ArcGIS.com,and each map uses different spatial analyses to convey information to the audience."],
+["Texas Water Development Board", "https://data.geographic.texas.gov/", "I really like this website and how easy it is to get data from you; you can get tons of data on Texas, mainly statistics and topography, along with several other things. It functions for the people of Texas to get free data."]
+];
+if (document.documentElement.scrollHeight > window.innerHeight)
+{
+    alert("Error: Does not veritically fit on the webpage.");
 }
