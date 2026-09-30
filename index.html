@@ -75,34 +75,63 @@ integrity="sha256-NDI0K41gVbWqfkkaHj15IzU7PtMoelkzyKp8TOaFQ3s=" crossorigin=""><
              ]);
              mymap.fitBounds(poly.getBounds());
              }).addTo(mymap);
-            //var marker = L.marker([51.5, -0.09]).addTo(mymap);
-          //var marker = L.marker([51.5, -0.09]).addTo(mymap);
-          //var circle = L.circle([51.508, -0.11], { color: 'red', fillColor: '#f03',
-          //  fillOpacity: 0.5, radius: 500}).addTo(mymap);
-        //  var polygon = L.polygon([[51.509, -0.08], [51.503, -0.06], [51.51, -
-          //  0.047]]).addTo(mymap);
-          //  marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-          //  circle.bindPopup("I am a circle.");
-          //  polygon.bindPopup("I am a polygon.");
-          //  marker.on('click', function(e){ mymap.setView(e.latlng, 14);})
-            //circle.on('click', function(e){ mymap.setView(e.latlng, 13);})
-            //polygon.on('click', function(e){ mymap.setView(e.latlng, 13);})
-          //var ZoomViewer = L.Control.extend({ onAdd: function(){
-          //var gauge = L.DomUtil.create('div');
-          //  gauge.style.width = '200px';
-          //  gauge.style.background = 'rgba(255,255,255,0.5)';
-            //gauge.style.textAlign = 'left';
-          //  mymap.on('zoomstart zoom zoomend', function(ev){
-          //  gauge.innerHTML = 'Zoom level: ' + mymap.getZoom();
-          //})
-        //  return gauge;
-        //  }
-          //});
-          //(new ZoomViewer).addTo(mymap);
-        //  var polyline = L.polyline([[51.506, -0.08], [51.502, -0.06], [51.507, -0.047]]).addTo(mymap);
-        mymap.setView([0,0], 1);
-    </script>
-  </div>
+             var LeafIcon = L.Icon.extend({
+               options: {
+                  iconSize:     [38, 95],
+                  shadowSize:   [50, 64],
+                  iconAnchor:   [22, 94],
+                  shadowAnchor: [4, 62],
+                  popupAnchor:  [-3, -76]
+                }
+              });
+              var Greatwallofchina = new LeafIcon({iconUrl: 'sysmbols/Greatwallofchina.jpg'}),
+                Machupichu = new LeafIcon({iconUrl: 'sysmbols/MAchu pichhu.jpg'}),
+                Mexciotemple = new LeafIcon({iconUrl: 'sysmbols/mexico Temple.jpg'});
+                Petra = new LeafIcon({iconUrl: 'sysmbols/Petra.jpg'});
+                RedemerofChrist = new LeafIcon({iconUrl: 'sysmbols/Redemer of christ.jpg'});
+                Romecolusume = new LeafIcon({iconUrl: 'sysmbols/Rome colusume.jpg'});
+                TajMahal = new LeafIcon({iconUrl: 'sysmbols/Taj Mahal.jpg'});
+            var marker1 = L.marker([27.174961, 78.042385],{icon: TajMahal}).addTo(mymap)
+            .bindPopup("<b>India's Taj Mahal</b><br>" +  "<img src='sysmbols/TajMahal_Real.jpg' width='200px'>" + "<br>An immense mausoleum of white marble, built in Agra between 1631 and 1648 by order of the Mughal emperor Shah Jahan in memory of his favourite wife, the Taj Mahal is the jewel of Muslim art in India and one of the universally admired masterpieces of the world's heritage. https://whc.unesco.org/en/list/252/").openPopup();
+            var marker2 = L.marker([40.334245, 116.477652], {icon: Greatwallofchina}).addTo(mymap)
+            .bindPopup("<b>Great Wall of China</b><br>"+ "<img src='sysmbols/Great_Wall_of_China_ Real.jpg' width='200px'>"+ "<br>In c. 220 B.C., under Qin Shi Huang, sections of earlier fortifications were joined together to form a united defence system against invasions from the north. Construction continued up to the Ming dynasty (1368–1644), when the Great Wall became the world's largest military structure. Its historic and strategic importance is matched only by its architectural significance. https://whc.unesco.org/en/list/438/").openPopup();
+            var marker3 = L.marker([30.328611, 35.441944], {icon: Petra}).addTo(mymap)
+            .bindPopup("<b>Petra</b><br>" + "<img src='sysmbols/Pretra_REal.jpg' width='200px'>" + "Inhabited since prehistoric times, this Nabataean caravan-city, situated between the Red Sea and the Dead Sea, was an important crossroads between Arabia, Egypt and Syria-Phoenicia. Petra is half-built, half-carved into the rock, and is surrounded by mountains riddled with passages and gorges. It is one of the world's most famous archaeological sites, where ancient Eastern traditions blend with Hellenistic architecture.https://whc.unesco.org/en/list/326/").openPopup();
+            var marker4 = L.marker([-22.951389, -43.2108334], {icon: RedemerofChrist}).addTo(mymap)
+            .bindPopup("<b>statue of Christ the Redeemer</b><br>" + "<img src='sysmbols/Christtheredemer_real.jpg' width='200px'>"+ "Christ the Redeemer, colossal statue of Jesus Christ at the summit of Mount Corcovado, Rio de Janeiro, southeastern Brazil. Celebrated in traditional and popular songs, Corcovado towers over Rio de Janeiro, Brazil’s principal port city. The statue of Christ the Redeemer was completed in 1931 and stands 98 feet (30 metres) tall, its horizontally outstretched arms spanning 92 feet (28 metres).https://www.britannica.com/topic/Christ-the-Redeemer").openPopup();
+            var marker5 = L.marker([-13.163056, -72.545556], {icon: Machupichu}).addTo(mymap)
+            .bindPopup("<b>Peru's Machu Picchu</b><br>" + "<img src='sysmbols/Machu-Picchu_Real.webp' width='200px'>"+ "Machu Picchu stands 2,430 m above sea-level, in the middle of a tropical mountain forest, in an extraordinarily beautiful setting. It was probably the most amazing urban creation of the Inca Empire at its height; its giant walls, terraces and ramps seem as if they have been cut naturally in the continuous rock escarpments. https://whc.unesco.org/en/list/274/").openPopup();
+            var marker6 = L.marker([20.682778, -88.569167], {icon: Mexciotemple}).addTo(mymap)
+            .bindPopup("<b>Chichen Itza pyramid</b><br>" + "<img src='sysmbols/Chichen_Itza_pyrami_Real.jpg' width='200px'>" + "This sacred site was one of the greatest Mayan centres of the Yucatán peninsula. Throughout its nearly 1,000-year history, different peoples have left their mark on the city. The Maya and Toltec vision of the world and the universe is revealed in their stone monuments and artistic works.https://whc.unesco.org/en/list/483/").openPopup();
+            var marker7 = L.marker([41.890169, 12.492269], {icon: Romecolusume}).addTo(mymap)
+            .bindPopup("<b>The Colosseum in Rome</b><br>" + "<img src='sysmbols/Colusume_Real.jpg' width='200px'>" + "Colosseum, giant amphitheater built in Rome under the Flavian emperors. Construction of the Colosseum was begun sometime between 70 and 72 ce during the reign of Vespasian. It is located just east of the Palatine Hill, on the grounds of what was Nero’s Golden House. https://www.britannica.com/topic/Colosseum").openPopup();
+            mymap.setView([0,0], 1);
+        </script>
+      </div>
+            <!--var marker = L.marker([51.5, -0.09]).addTo(mymap);
+            var circle = L.circle([51.508, -0.11], { color: 'red', fillColor: '#f03',
+              fillOpacity: 0.5, radius: 500}).addTo(mymap);
+            var polygon = L.polygon([[51.509, -0.08], [51.503, -0.06], [51.51, -
+              0.047]]).addTo(mymap);
+            marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+             circle.bindPopup("I am a circle.");
+             polygon.bindPopup("I am a polygon.");
+              marker.on('click', function(e){ mymap.setView(e.latlng, 14);})
+              //circle.on('click', function(e){ mymap.setView(e.latlng, 13);})
+              //polygon.on('click', function(e){ mymap.setView(e.latlng, 13);})
+            //var ZoomViewer = L.Control.extend({ onAdd: function(){
+            //var gauge = L.DomUtil.create('div');
+            //  gauge.style.width = '200px';
+            //  gauge.style.background = 'rgba(255,255,255,0.5)';
+              //gauge.style.textAlign = 'left';
+            //  mymap.on('zoomstart zoom zoomend', function(ev){
+            //  gauge.innerHTML = 'Zoom level: ' + mymap.getZoom();
+            //})
+          //  return gauge;
+          //  }
+            //});
+            //(new ZoomViewer).addTo(mymap);
+          //  var polyline = L.polyline([[51.506, -0.08], [51.502, -0.06], [51.507, -0.047]]).addTo(mymap); -->
     <div id="copyright">
       <script>
         // Creates a new Date object that contains the current date and time.
