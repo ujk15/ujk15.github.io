@@ -1,0 +1,209 @@
+<!doctype html>
+<html>
+  <head>
+    <!-- makes a website and loads the arcgis api for javascript -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content = "initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>Lab07 Raibourn</title>
+    <link rel = "stylesheet" href = "https://js.arcgis.com/4.21/esri/themes/light/main.css"/>
+    <script src = "https://js.arcgis.com/4.21/"> </script>
+    <!-- sets the style for map and website including pop up table and query box -->
+    <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+    #optionsDiv{
+      background-color: dimgray;
+      color: white;
+      padding: 10px;
+      width: 350px;
+    }
+    .esri-popup .esri-popup-header .esri-title {
+      font-size: 18px;
+      font-weight: bolder;
+    }
+    .esri-popup .esri-popup-body .esri-popup-content {
+      font-size: 14px;
+    }
+    </style>
+    <!-- links to the other lab html file along with conatain where the map will apear-->
+  </head>
+<body>
+    <header>
+      <div>
+        <h1> Andy Raibourn Web Map and html Files</h1>
+          <p>These are my Lab 7 html files
+            <a href="simple_mapping.html" target="_blank">Simple Mapping</a>,
+            <a href="tile_layer.html" target="_blank">Tile Layer</a>,
+            <a href="basemap_gallery.html" target="_blank">Basemap Gallery</a>,
+            <a href="dynamic_layers.html" target="_blank">Dynamic Layer</a>,
+            <a href="on_event.html" target="_blank">On Event</a>, and
+            <a href="query_task.html" target="_blank">Query Task</a>
+          </p>
+        </div>
+      </header>
+
+<div id="viewDiv"></div>
+
+<!-- Query panel that lets you search Texas reservoirs -->
+<div class="esri-widget" id="optionsDiv">
+  <h2>Texas Reservoirs</h2>
+
+ <!-- Selects which reservoir attribute will be queried -->
+<label for="attSelect">Reservoir attribute:</label>
+<select class="esri-widget" id="attSelect">
+  <option value="percent_full" selected>Percent Full</option>
+</select>
+
+<!-- Selects the comparison operator for the query -->
+<select class="esri-widget" id="signSelect">
+  <option value="&gt;">is greater than</option>
+  <option value="&lt;">is less than</option>
+  <option value="=">is equal to</option>
+</select>
+
+ <!-- Selects the percentage value to compare against -->
+<select class="esri-widget" id="valSelect">
+  <option value="25">25%</option>
+  <option value="50" selected>50%</option>
+  <option value="75">75%</option>
+  <option value="90">90%</option>
+</select>
+
+<br><br>
+ <!-- Runs the query when clicked -->
+<button class="esri-widget" id="doBtn">Query Reservoirs</button>
+ <!-- Displays how many reservoirs match the query -->
+<p><span id="printResults"></span></p>
+</div>
+
+    <script>
+// Loads the ArcGIS modules required for the map and query
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/TileLayer",
+      "esri/layers/MapImageLayer",
+      "esri/layers/GraphicsLayer",
+      "esri/layers/FeatureLayer",
+      "esri/tasks/QueryTask",
+      "esri/tasks/support/Query",
+      "dojo/_base/array",
+      "dojo/dom",
+      "dojo/on",
+      "dojo/domReady!"
+    ], function (
+      Map, MapView, TileLayer, MapImageLayer, GraphicsLayer,
+FeatureLayer, QueryTask, Query, arrayUtils, dom, on
+) {
+ // Defines the appearance of the reservoir symbols on the map
+        var TxresRenderer = {
+          type: "simple",
+          symbol: {
+            type: "simple-marker",
+            size: 3,
+            color: "red",
+            style: "circle",
+            outline:{
+              width: 1,
+              color: "red"
+            }
+          },
+        };
+        // Creates a feature layer using the Texas reservoir service
+              // The layer contains reservoir locations and their attributes
+        var TxresLayer = new FeatureLayer({
+          url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/Texas_Reservoirs_Recent_Conditions_(Bjorn)/FeatureServer/0",
+          renderer: TxresRenderer,
+          opacity: 1,
+          outFields: ["*"]
+        });
+// Creates an empty graphics layer for displaying query results
+        var resultsLayer = new GraphicsLayer();
+// Creates the map and adds the reservoir and results layers
+        var map = new Map({
+          basemap: "topo-vector",
+          layers: [TxresLayer,resultsLayer]
+        });
+  // Creates the map view and sets its starting location and zoom
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          zoom:6,
+          center: [-99.3312, 31.4757]
+          });
+// Runs after the map view has finished initializing, and places
+// the query panel in the upper-right corner of the map, along with running doQuery() when the query button is clicked
+          view.when(function(){
+            view.ui.add("optionsDiv", "top-right");
+            on(dom.byId("doBtn"), "click", doQuery);
+          });
+// Gets references to the HTML dropdown menus
+          var attributeName = dom.byId("attSelect");
+          var expressionSign = dom.byId("signSelect");
+          var value = dom.byId("valSelect");
+// Runs when the user clicks the Query Reservoirs button amd builds an sql function
+          function doQuery(){
+            resultsLayer.removeAll();
+            params.where = attributeName.value + " " + expressionSign.value + " " + value.value;
+            qTask.execute(params)
+              .then(getResults)
+              .catch(promiseRejected);
+          }
+
+// Processes the features returned by the query
+          function getResults(response){
+// Goes through each matching reservoir and assigns its popup
+            var resconResults = arrayUtils.map(
+              response.features,
+              function(feature){
+                feature.popupTemplate = resconTemplate;
+                return feature;
+              }
+            );
+// Adds the matching reservoirs to the results graphics layer and zooms into it.
+            resultsLayer.addMany(resconResults);
+            view.goTo(resconResults).then(function(){
+              view.popup.open({
+                features: resconResults,
+                featureMenuOpen: true,
+                updateLocationEnabled: true
+              });
+            });
+            dom.byId("printResults").innerHTML = resconResults.length + " results found!";
+          };
+          function promiseRejected(error){
+            console.error("Promise rejected: ", error.message," Parameter values: ", attributeName.value,
+        expressionSign.value, value.value);
+          }
+   // Defines the URL for the reservoir feature service
+          var resconUrl = "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/Texas_Reservoirs_Recent_Conditions_(Bjorn)/FeatureServer/0";
+// Defines the information shown when a reservoir popup opens
+          var resconTemplate = {
+            title: "{full_name}",
+            content: "Percent full: {percent_full}%"
+          };
+// Creates a QueryTask that sends queries to the reservoir service
+// Defines the query settings
+          var qTask = new QueryTask({ url: resconUrl });
+          var params = new Query({
+            returnGeometry: true,
+            outFields: ["*"]
+          });
+        });
+    </script>
+    <div id="copyright">
+      <script>
+        // Creates a new Date object that contains the current date and time.
+        var today = new Date();
+        // Gets the current year from the date and stores it in the year variable.
+        var year = today.getFullYear();
+         // Displays the copyright symbol and the current year on the webpage.
+        document.writeln("Copyright &copy; " + year);
+      </script>
+    </div>
+  </body>
+</html>
